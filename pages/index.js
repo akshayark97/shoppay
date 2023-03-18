@@ -1,9 +1,12 @@
 import axios from "axios";
+import { useSession } from "next-auth/react"
 
 import Footer from "@/components/footer";
 import Header from "../components/header";
 
 export default function Home({ country }) {
+  const { data: session } = useSession()
+  console.log(session)
   return (
     <div>
       <Header country={country} />

@@ -5,21 +5,20 @@ import { BsSuitHeart } from "react-icons/bs";
 import { RiAccountPinCircleLine, RiArrowDropDownFill } from "react-icons/ri";
 import Link from "next/link";
 import UserMenu from "./UserMenu";
+import { useSession } from "next-auth/react";
 
 export default function Top({ country }) {
-  const [loggedIn, setLoggedIn] = useState(true);
   const [visible, setVisible] = useState(false);
+  const { data: session } = useSession();
+
   return (
     <div className={styles.top}>
       <div className={styles.top__container}>
         <div></div>
         <ul className={styles.top__list}>
           <li className={styles.li}>
-            <img
-              src={country.flag}
-              alt=""
-            />
-            <span>{country.name} / usd</span>
+            <img src={country?.flag} alt="" />
+            <span>{country?.name} / usd</span>
           </li>
           <li className={styles.li}>
             <MdSecurity />
@@ -42,14 +41,11 @@ export default function Top({ country }) {
             onMouseOver={() => setVisible(true)}
             onMouseLeave={() => setVisible(false)}
           >
-            {loggedIn ? (
+            {session ? (
               <li className={styles.li}>
                 <div className={styles.flex}>
-                  <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgSmojUgwjIB87c4Q0hLCAyl__oiTySWGWJUZtUNHlHjBALLzTsu_vMHYMaEwLts4QEoo&usqp=CAU"
-                    alt=""
-                  />
-                  <span>Akshay Rk</span>
+                  <img src={session.user.image} alt="" />
+                  <span>{session.user.name}</span>
                   <RiArrowDropDownFill />
                 </div>
               </li>
@@ -62,7 +58,7 @@ export default function Top({ country }) {
                 </div>
               </li>
             )}
-            {visible && <UserMenu loggedIn={loggedIn} />}
+            {visible && <UserMenu session={session} />}
           </li>
         </ul>
       </div>

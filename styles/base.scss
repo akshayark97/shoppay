@@ -1,5 +1,8 @@
 $blue-color: #2f82ff;
 $grey-color: #f8f8f8;
+$light-error-color: #fd010169;
+$error-color: #ed4337;
+$success-color: #6cc070;
 $shadow-1: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 .btn_primary {
   display: flex;
@@ -30,4 +33,14 @@ $shadow-1: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+.success {
+  color: $success-color;
+  padding: 10px;
+}
+
+.error {
+  color: $error-color;
+  padding: 10px;
 }
