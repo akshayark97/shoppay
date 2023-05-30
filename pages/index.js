@@ -17,8 +17,12 @@ import { useMediaQuery } from "react-responsive";
 import ProductsSwiper from "@/components/productSwiper";
 import { gamingSwiper } from "@/data/home";
 import { homeImprovSwiper } from "@/data/home";
+import db from "@/utils/db";
+import Product from "@/models/Product";
+import ProductCard from "@/components/productCard";
 
-export default function Home({ country }) {
+export default function Home({ country, products }) {
+  console.log("products", products);
   const { data: session } = useSession();
   const isMedium = useMediaQuery({ query: "(max-width:850px)" });
   const isMobile = useMediaQuery({ query: "(max-width:550px)" });
@@ -58,12 +62,21 @@ export default function Home({ country }) {
             />
           </div>
           <ProductsSwiper products={women_swiper} />
-          <ProductsSwiper products={gamingSwiper} header="For Gamers" bg="#2f82ff" />
+          <ProductsSwiper
+            products={gamingSwiper}
+            header="For Gamers"
+            bg="#2f82ff"
+          />
           <ProductsSwiper
             products={homeImprovSwiper}
             header="House Improvements"
             bg="#5a31f4"
           />
+          <div className={styles.products}>
+            {products.map((product) => (
+              <ProductCard product={product} key={product._id} />
+            ))}
+          </div>
         </div>
       </div>
       <Footer country={country} />
@@ -72,6 +85,9 @@ export default function Home({ country }) {
 }
 
 export async function getServerSideProps() {
+  db.connectDb();
+  let products = await Product.find().sort({ createdAt: -1 }).lean();
+  console.log(products);
   const data = await axios
     // .get("https://api.ipregistry.co/?key=s3i2dd130k57m1o4")
     .get("")
@@ -83,6 +99,7 @@ export async function getServerSideProps() {
     });
   return {
     props: {
+      products: JSON.parse(JSON.stringify(products)),
       // country: {name: data.name, flag: data.flag.emojitwo}
       country: {
         name: "Morocco",
